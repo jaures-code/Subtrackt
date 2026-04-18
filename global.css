@@ -134,11 +134,11 @@
     }
 
     .upcoming-icon {
-        @apply size-14;
+        @apply size-10;
     }
 
     .upcoming-price {
-        @apply text-lg font-sans-bold text-primary;
+        @apply text-lg font-sans-bold text-primary self-center;
     }
 
     .upcoming-meta {
