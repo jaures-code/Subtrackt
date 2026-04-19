@@ -8,16 +8,24 @@ import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
+import { useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 export default function App() {
+  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
-      <View className="home-header">
+       
+      
+
+        <FlatList 
+        ListHeaderComponent={() => (
+          <>
+            <View className="home-header">
         <View className="home-user">
           <Image source={images.avatar} className="home-avatar"/>
           <Text className="home-user-name">{HOME_USER.name}</Text>
@@ -39,7 +47,7 @@ export default function App() {
 
       </View>
 
-      <View>
+      <View className="mb-5">
         <ListHeading title= "Upcoming"/>
         <FlatList 
         data={UPCOMING_SUBSCRIPTIONS} 
@@ -51,12 +59,27 @@ export default function App() {
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text className="home-empty-state">No upcoming Subscriptions renewals yet.</Text>}
         />
+     
       </View>
-
-        <View>
-        <ListHeading title= "All Subscription"/>
-        <SubscriptionCard {...HOME_SUBSCRIPTIONS[0]}/>
-      </View>      
+      <ListHeading title= "All Subscription"/>
+          </>
+        )} 
+        data={HOME_SUBSCRIPTIONS}
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => (
+        <SubscriptionCard 
+          {...item} 
+          expanded={expandedSubscriptionId === item.id} 
+          onPress={() => setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id))}
+        />
+        )}
+        extraData={expandedSubscriptionId}
+        ItemSeparatorComponent={() => <View className="h-4"/>}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<Text className="home-empty-state">No Subscriptions yet.</Text>}
+        contentContainerClassName="pb-30"
+        />
+          
     </SafeAreaView> 
    
   );
